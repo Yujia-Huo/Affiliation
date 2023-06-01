@@ -36,13 +36,25 @@ d3.csv('./data/dimr_13.02.csv', parseCountries).then(function(data){
     dataByYear.sort((a, b) => a.year - b.year);
     
 
+
+
+
+    let groupedDataSource = d3.group(data, d => d.source);
+let dataBySource = Array.from(groupedDataSource, ([key, value]) => ({
+  source: key, 
+  // public: d3.mean(value, d => d.public),
+  belong: d3.mean(value, d => d.belong),
+  // total: value.length
+}));
+dataBySource.sort((a, b) => d3.ascending(a.source, b.source));
+
 //     let count = 0;
 // data.forEach(d => {
 //   if (d.sdr > 0.5) {
 //     count++;
 //   }
 // });
-console.log(dataByYear);
+console.log(dataBySource);
 
     // console.log(dataByYearSDR);
 
@@ -154,7 +166,7 @@ svg.append("circle")
 svg.append("text")
     .attr("x",  width-240)
     .attr("y", -20)
-    .text("% Population attend Public Practice weekly")
+    .text("% Population attend Public Practice Monthly")
     .style("font-size", "12px")
     .attr("alignment-baseline", "middle");
 
@@ -194,5 +206,105 @@ svg.append("text")
   .style("text-anchor", "middle")
   .style('opacity', .5)
   .text("Percentage of total population");
+
+
+
+
+
+
+
+
+
+
+  /****************Bar Chart********* */
+
+  let totalAvg = d3.mean(dataBySource, d => d.belong);
+
+  console.log(totalAvg);
+
+  let svg2 = d3.select("#viz2").append("svg")
+  //   .attr("width", width + margin.left + margin.right)
+  //   .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${ width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+// Create scales
+let yScale2 = d3.scaleBand()
+    .range([0, height])
+    .padding(0.6);
+let xScale2 = d3.scaleLinear()
+    .range([0, width]);
+
+yScale2.domain(dataBySource.map(d => d.source));
+xScale2.domain([0, 1]);
+
+svg2.append("g")			
+.attr("class", "grid")
+.attr("transform", `translate(0,${height})`)  // Adjust the transformation here
+.call(d3.axisBottom(xScale2)
+  .tickSize(-height)  // should be height, not width
+  .tickFormat("")
+)
+
+.select(".domain").remove();
+
+// Create bars
+svg2.selectAll(".bar")
+    .data(dataBySource)
+    .enter().append("rect")
+    .attr("class", "bar")
+    .attr("y", d => yScale2(d.source))
+    .attr("height", yScale2.bandwidth())
+    .attr("x", 0)
+    .attr('fill', '#4e79a7')
+    .attr("width", d => xScale2(d.belong));
+
+// Add x-axis
+svg2.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(xScale2).tickFormat(d3.format(".0%")));
+
+// Add y-axis
+svg2.append("g")
+    .call(d3.axisLeft(yScale2));
+
+    let xPos = xScale2(totalAvg);
+
+svg2.append("line")
+    .attr("x1", xPos)  // x position of the start and end of the line
+    .attr("x2", xPos)
+    .attr("y1", 0)  // y position of the start of the line (top of the chart area)
+    .attr("y2", height)  // y position of the end of the line (bottom of the chart area)
+    .attr("stroke", "#76b7b2")  // color of the line
+    .attr("stroke-width", 2)  // width of the line
+    // .attr("stroke-dasharray", "5,5");
+
+    svg2.append("text")
+    .attr("x", xPos + 10)  // x position of the text (slightly right from the line)
+    .attr("y", 0)  // y position of the text (near the top of the chart area)
+    .text("Total Average Percentage of Affiliation")  // the text to display (the average rounded to 2 decimal places)
+    // .attr("font-family", "sans-serif")  // font of the text
+    .attr("font-size", "12px")  // size of the text
+    .attr("fill", "#76b7b2"); 
+
+
+    svg2.append("text")
+    .attr("x", width/2)
+    .attr("y", height + margin.bottom-20)
+    .style("text-anchor", "middle")
+    .style('font-size', '10pt')
+    .style('opacity', .5)
+    .text("Percentage of total population");
+
+
+    svg2.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left+30)
+    .attr("x", 0 - (height / 2))
+    .style('font-size', '10pt')
+    .style("text-anchor", "middle")
+    .style('opacity', .5)
+    .text("Source");
 
 })
