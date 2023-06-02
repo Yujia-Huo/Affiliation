@@ -59,7 +59,7 @@ console.log(dataBySource);
     // console.log(dataByYearSDR);
 
 // console.log(data);
-let margin = { top: 100, right: 150, bottom: 80, left: 90 };
+let margin = { top: 100, right: 150, bottom: 80, left: 130 };
 let width = 1200;
 let height = 500;
 
@@ -95,10 +95,12 @@ let line = d3.line()
     // Append x-axis
 svg.append("g")
 .attr("transform", `translate(0,${height})`)
-.call(d3.axisBottom(xScale).ticks(dataByYear.length).tickFormat(d3.format("d")));
+.call(d3.axisBottom(xScale).ticks(dataByYear.length).tickFormat(d3.format("d")))
+.style("font-size", "14px");
 
 svg.append("g")
-  .call(d3.axisLeft(yScale).tickFormat(d3.format(".0%")));
+  .call(d3.axisLeft(yScale).tickFormat(d3.format(".0%")))
+  .style("font-size", "14px");
 
 
 
@@ -155,7 +157,7 @@ svg.append("path")
 
 // Append the circle for the 'public' line
 svg.append("circle")
-    .attr("cx", width-260)
+    .attr("cx", width-310)
     .attr("cy", -20)
     .attr("r", 6)
     .attr('stroke-width',2)
@@ -164,15 +166,15 @@ svg.append("circle")
 
 // Append the label for the 'public' line
 svg.append("text")
-    .attr("x",  width-240)
+    .attr("x",  width-300)
     .attr("y", -20)
     .text("% Population attend Public Practice Monthly")
-    .style("font-size", "12px")
+    .style("font-size", "15px")
     .attr("alignment-baseline", "middle");
 
 // Append the circle for the 'sdr' line
 svg.append("circle")
-    .attr("cx", width-260)
+    .attr("cx", width-310)
     .attr("cy", -50)
     .attr("r", 6)
     .attr('stroke','#59a14f')
@@ -181,10 +183,10 @@ svg.append("circle")
 
 // Append the label for the 'sdr' line
 svg.append("text")
-    .attr("x",width-240)
+    .attr("x",width-300)
     .attr("y", -50)
     .text("% Population has Religious Affiliation")
-    .style("font-size", "12px")
+    .style("font-size", "15px")
     .attr("alignment-baseline", "middle");
 
 
@@ -193,16 +195,16 @@ svg.append("text")
   .attr("x", width/2)
   .attr("y", height + margin.bottom-20)
   .style("text-anchor", "middle")
-  .style('font-size', '10pt')
+  .style('font-size', '12pt')
   .style('opacity', .5)
   .text("Year");
 
 
   svg.append("text")
   .attr("transform", "rotate(-90)")
-  .attr("y", 0 - margin.left+30)
+  .attr("y", 0 - margin.left+50)
   .attr("x", 0 - (height / 2))
-  .style('font-size', '10pt')
+  .style('font-size', '12pt')
   .style("text-anchor", "middle")
   .style('opacity', .5)
   .text("Percentage of total population");
@@ -263,11 +265,14 @@ svg2.selectAll(".bar")
 // Add x-axis
 svg2.append("g")
     .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(xScale2).tickFormat(d3.format(".0%")));
+    .call(d3.axisBottom(xScale2).tickFormat(d3.format(".0%")))
+    .style("font-size", "14px");
 
 // Add y-axis
 svg2.append("g")
-    .call(d3.axisLeft(yScale2));
+    .call(d3.axisLeft(yScale2))
+    .style("font-size", "14px");
+
 
     let xPos = xScale2(totalAvg);
 
@@ -285,7 +290,7 @@ svg2.append("line")
     .attr("y", 0)  // y position of the text (near the top of the chart area)
     .text("Total Average Percentage of Affiliation")  // the text to display (the average rounded to 2 decimal places)
     // .attr("font-family", "sans-serif")  // font of the text
-    .attr("font-size", "12px")  // size of the text
+    .attr("font-size", "16px")  // size of the text
     .attr("fill", "#76b7b2"); 
 
 
@@ -293,16 +298,16 @@ svg2.append("line")
     .attr("x", width/2)
     .attr("y", height + margin.bottom-20)
     .style("text-anchor", "middle")
-    .style('font-size', '10pt')
+    .style('font-size', '14pt')
     .style('opacity', .5)
     .text("Percentage of total population");
 
 
     svg2.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left+30)
+    .attr("y", 0 - margin.left+60)
     .attr("x", 0 - (height / 2))
-    .style('font-size', '10pt')
+    .style('font-size', '14pt')
     .style("text-anchor", "middle")
     .style('opacity', .5)
     .text("Source");
