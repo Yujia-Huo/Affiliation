@@ -300,7 +300,7 @@ svg2.append("line")
     .style("text-anchor", "middle")
     .style('font-size', '14pt')
     .style('opacity', .5)
-    .text("Percentage of total population");
+    .text("Percentage of total population with affiliation");
 
 
     svg2.append("text")
